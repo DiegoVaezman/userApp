@@ -32,10 +32,10 @@ export default function UserCard(props) {
             </View>
             <View style={styles.cardFunctions}>
                 <View style={styles.cardFunctionsButton} >
-                    <Button title="Modify" />
+                    <Button title="Modify" onPress={() => props.setModifyUserModalVisible(true)}/>
                 </View>
                 <View style={styles.cardFunctionsButton} >
-                    <Button title="Delete" />
+                    <Button title="Delete" onPress={() => props.setDeleteUserModalVisible(true)}/>
                 </View>
             </View>
         </View>

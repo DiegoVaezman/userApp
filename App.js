@@ -1,21 +1,26 @@
-import React, { useEffect, useState }from "react"
-import { 
-  Text, 
-  View, 
-  ActivityIndicator, 
-  Button, 
-  Alert, 
-  Dimensions, 
-  Platform, 
-  StyleSheet, 
+import React, { useEffect, useState } from "react"
+import {
+  Text,
+  View,
+  ActivityIndicator,
+  Button,
+  Alert,
+  Dimensions,
+  Platform,
+  StyleSheet,
   Image,
   TouchableHighlight,
-  FlatList
-  } from "react-native"
+  FlatList,
+  Modal,
+  Pressable
+} from "react-native"
 import ListItem from "./components/listItem"
 import usersData from "./data/users.json"
 import Header from "./components/header"
 import UserCard from "./components/userCard"
+import AddUserModal from "./components/addUserModal"
+import ModifyUserModal from "./components/modifyUserModal"
+import DeleteUserModal from "./components/deleteUserModal"
 
 const { height, width } = Dimensions.get('window')
 // let localColor:String;
@@ -28,12 +33,16 @@ export default function App() {
   console.log("hola pepa")
 
   const [selectedUser, setSelectedUser] = useState({
-    name: "Select one user", 
+    name: "Select one user",
     lastName: ""
   })
 
+  const [addUserModalVisible, setAddUserModalVisible] = useState(false);
+  const [modifyUserModalVisible, setModifyUserModalVisible] = useState(false);
+  const [deleteUserModalVisible, setDeleteUserModalVisible] = useState(false);
+
   function show(user) {
-    setSelectedUser({name: user.name, lastName: user.lastName})
+    setSelectedUser({ name: user.name, lastName: user.lastName })
   }
 
   // const [appColor, setAppColor] = useState("")
@@ -75,22 +84,26 @@ export default function App() {
 
       <View style={styles.page1}>
         <Header />
-        <UserCard selectedUser={selectedUser} />
+        <UserCard selectedUser={selectedUser} setModifyUserModalVisible={setModifyUserModalVisible} setDeleteUserModalVisible={setDeleteUserModalVisible}/>
         <Image style={{ width: 30, height: 30, resizeMode: 'contain', marginLeft: 10 }} source={require('./assets/GitHub_logo.png')} />
         <FlatList style={styles.list}
           data={usersData}
-          renderItem={ ({item}) => {
+          renderItem={({ item }) => {
             return (
               <ListItem key={item.id} user={item} onPress={show} />
             );
           }}
         />
         <View style={styles.button} >
-          <Button title="Add new User" />
+          <Button title="Add new User" onPress={() => setAddUserModalVisible(true)} />
         </View>
-      </View>
 
-      
+
+        <AddUserModal setAddUserModalVisible={setAddUserModalVisible} addUserModalVisible={addUserModalVisible}/>
+        <ModifyUserModal setModifyUserModalVisible={setModifyUserModalVisible} modifyUserModalVisible={modifyUserModalVisible} selectedUser={selectedUser} />
+        <DeleteUserModal setDeleteUserModalVisible={setDeleteUserModalVisible} deleteUserModalVisible= {deleteUserModalVisible} />
+
+      </View>
     </View>
   )
 }
@@ -124,7 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   list: {
-    height: height -420,
+    height: height - 420,
     margin: 10,
     marginTop: 0,
     marginBottom: 20,
@@ -134,5 +147,53 @@ const styles = StyleSheet.create({
   button: {
     width: width - 200,
     alignSelf: "center"
+  },
+
+
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)"
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  modalButtons: {
+    flexDirection: "row",
+    width: "100%"
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  buttonCancel: {
+    marginRight: "auto"
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
   }
 })
