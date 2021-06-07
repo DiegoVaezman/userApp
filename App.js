@@ -12,9 +12,10 @@ import {
   TouchableHighlight,
   FlatList
   } from "react-native"
-import ListItem from './components/listItem'
+import ListItem from "./components/listItem"
 import usersData from "./data/users.json"
 import Header from "./components/header"
+import UserCard from "./components/userCard"
 
 const { height, width } = Dimensions.get('window')
 // let localColor:String;
@@ -74,24 +75,8 @@ export default function App() {
 
       <View style={styles.page1}>
         <Header />
-        <View style={styles.card}>
-          <View style={styles.cardBody}>
-            <Image style={{width:100, height:100, resizeMode: 'contain'}} source={require('./assets/GitHub_logo.png')} />
-            <View style={styles.cardBodyText}>
-              <Text style={styles.text} >Name: {selectedUser.name}</Text>
-              <Text style={styles.text} >Birthdate: {selectedUser.lastName}</Text>
-            </View>
-            <Image style={{width:50, height:50, resizeMode: 'contain'}} source={require('./assets/GitHub_logo.png')} />
-          </View>
-          <View style={styles.cardFunctions}>
-            <View style={styles.cardFunctionsButton} >
-              <Button title="Modify" />
-            </View>
-            <View style={styles.cardFunctionsButton} >
-              <Button title="Delete" />
-            </View>
-          </View>
-        </View>
+        <UserCard selectedUser={selectedUser} />
+        <Image style={{ width: 30, height: 30, resizeMode: 'contain', marginLeft: 10 }} source={require('./assets/GitHub_logo.png')} />
         <FlatList style={styles.list}
           data={usersData}
           renderItem={ ({item}) => {
@@ -138,44 +123,10 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20
   },
-  header: {
-    backgroundColor: "purple",
-    height: height -730,
-    paddingLeft: 20,
-    justifyContent: "center"
-  },
-  card: {
-    borderWidth: 1,
-    borderColor: "blue",
-    margin: 10,
-    padding: 10,
-    height: height -600,
-    justifyContent: "space-between"
-  },
-  cardBody: {
-    flexDirection: "row"
-  },
-  cardBodyText: {
-    width: width - 190,
-    paddingLeft:20,
-    justifyContent: "space-around"
-  },
-  searchImage: {
-
-  },
-  cardFunctions: {
-    flexDirection: "row",
-    alignSelf: "flex-end",
-    justifyContent: "space-between",
-    width: width - 250
-  },
-  cardFunctionsButton: {
-    width: width - 340,
-    
-  },
   list: {
-    height: height -400,
+    height: height -420,
     margin: 10,
+    marginTop: 0,
     marginBottom: 20,
     borderWidth: 1,
     borderColor: "blue"
