@@ -15,7 +15,6 @@ import {
 export default function UsersList({user, onPress = (f) => f, localColor}){
 
     
-
     return (
         <TouchableHighlight onPress={() => onPress(user)}>
             <View style={styles.itemList}>
