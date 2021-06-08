@@ -42,7 +42,6 @@ export default function AddUserModal(props) {
         setForm({ name: "", date: "" })
     }
 
-    console.log(form)
     return (
         <Modal
             animationType="slide"

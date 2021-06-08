@@ -12,11 +12,14 @@ import {
     TouchableHighlight 
     } from "react-native";
 
-export default function UsersList({user, onPress = (f) => f}){
+export default function UsersList({user, onPress = (f) => f, localColor}){
+
+    
+
     return (
         <TouchableHighlight onPress={() => onPress(user)}>
             <View style={styles.itemList}>
-                <View style={styles.circleDot}/>
+                <View style={[styles.circleDot, {backgroundColor: localColor}]}/>
                 <Text style={styles.text}>{user.name}</Text>
             </View>
         </TouchableHighlight>
@@ -37,8 +40,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
         width: 10,
         height: 10,
-        borderRadius: 10,
-        backgroundColor: "blue"
+        borderRadius: 20
     },
     text: {
         fontSize: 20
