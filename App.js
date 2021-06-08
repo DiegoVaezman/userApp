@@ -21,6 +21,7 @@ import UserCard from "./components/userCard"
 import AddUserModal from "./components/addUserModal"
 import ModifyUserModal from "./components/modifyUserModal"
 import DeleteUserModal from "./components/deleteUserModal"
+import SearchUserModal from "./components/searchUserModal"
 
 const { height, width } = Dimensions.get('window')
 // let localColor:String;
@@ -40,9 +41,26 @@ export default function App() {
   const [addUserModalVisible, setAddUserModalVisible] = useState(false);
   const [modifyUserModalVisible, setModifyUserModalVisible] = useState(false);
   const [deleteUserModalVisible, setDeleteUserModalVisible] = useState(false);
+  const [searchUserModalVisible, setSearchUserModalVisible] = useState(false);
 
   function show(user) {
     setSelectedUser({ name: user.name, lastName: user.lastName })
+  }
+
+  const addNewUser = (newUser) => {
+    console.log("se añade usuario:", newUser.name, newUser.date)
+  }
+
+  const modifyUser = (modifiedUser) => {
+    console.log("se modifica usuario ", selectedUser.name, "por", modifiedUser.name, "y", modifiedUser.date)
+  }
+
+  const deleteUser = () => {
+    console.log("se elimina usuario: ", selectedUser.name)
+  }
+
+  const searchUser = (searchUser) => {
+    console.log("se busca a usuario: ", searchUser.name)
   }
 
   // const [appColor, setAppColor] = useState("")
@@ -84,7 +102,7 @@ export default function App() {
 
       <View style={styles.page1}>
         <Header />
-        <UserCard selectedUser={selectedUser} setModifyUserModalVisible={setModifyUserModalVisible} setDeleteUserModalVisible={setDeleteUserModalVisible}/>
+        <UserCard selectedUser={selectedUser} setModifyUserModalVisible={setModifyUserModalVisible} setDeleteUserModalVisible={setDeleteUserModalVisible} setSearchUserModalVisible= {setSearchUserModalVisible}/>
         <Image style={{ width: 30, height: 30, resizeMode: 'contain', marginLeft: 10 }} source={require('./assets/GitHub_logo.png')} />
         <FlatList style={styles.list}
           data={usersData}
@@ -99,9 +117,28 @@ export default function App() {
         </View>
 
 
-        <AddUserModal setAddUserModalVisible={setAddUserModalVisible} addUserModalVisible={addUserModalVisible}/>
-        <ModifyUserModal setModifyUserModalVisible={setModifyUserModalVisible} modifyUserModalVisible={modifyUserModalVisible} selectedUser={selectedUser} />
-        <DeleteUserModal setDeleteUserModalVisible={setDeleteUserModalVisible} deleteUserModalVisible= {deleteUserModalVisible} />
+        <AddUserModal 
+          setAddUserModalVisible={setAddUserModalVisible} 
+          addUserModalVisible={addUserModalVisible}
+          addNewUser={addNewUser}
+        />
+        <ModifyUserModal 
+          setModifyUserModalVisible={setModifyUserModalVisible} 
+          modifyUserModalVisible={modifyUserModalVisible} 
+          selectedUser={selectedUser} 
+          modifyUser= {modifyUser}
+        />
+        <DeleteUserModal 
+          setDeleteUserModalVisible={setDeleteUserModalVisible} 
+          deleteUserModalVisible= {deleteUserModalVisible} 
+          selectedUser={selectedUser} 
+          deleteUser={deleteUser}
+        />
+        <SearchUserModal 
+          setSearchUserModalVisible= {setSearchUserModalVisible} 
+          searchUserModalVisible= {searchUserModalVisible} 
+          searchUser= {searchUser}
+          />
 
       </View>
     </View>

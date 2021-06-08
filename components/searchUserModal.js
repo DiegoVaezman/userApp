@@ -15,29 +15,22 @@ import {
     Pressable,
     TextInput
 } from "react-native"
-import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 const { height, width } = Dimensions.get('window')
 
 
-export default function ModifyUserModal(props) {
+export default function SearchUserModal(props) {
 
     const [form, setForm] = useState({
-        name: "",
-        date: ""
+        name: ""
     });
-    const [show, setShow] = useState(false);
 
-    const onChangeDate = (event, selectedDate) => {
-        const currentDate = selectedDate;
-        setShow(Platform.OS === 'ios');
-        setForm({ ...form, date: currentDate });
-    };
     const onChangeText = (text) => {
         console.log(text)
         setForm({ ...form, name: text })
     }
+
     const resetForm = () => {
         console.log("Se resetea form")
         setForm({ name: "", date: "" })
@@ -47,49 +40,31 @@ export default function ModifyUserModal(props) {
         <Modal
             animationType="slide"
             transparent={true}
-            visible={props.modifyUserModalVisible}
+            visible={props.searchUserModalVisible}
             onRequestClose={() => {
-                props.setModifyUserModalVisible(!props.modifyUserModalVisible);
+                props.setSearchUserModalVisible(!props.searchUserModalVisible);
             }}
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Please, enter new data for the user: {props.selectedUser.name}</Text>
+                    <Text style={styles.modalText}>Search user by name</Text>
 
                     <View style={styles.input}>
                         <TextInput style={styles.textInput} placeholder="Name" value={form.name} onChangeText={onChangeText} />
                     </View>
-                    <TouchableHighlight style={styles.input} onPress={() => setShow(true)}>
-                        <Text style={styles.textInput} > {form.date == "" || form.date == undefined ? "Birthdate" : form.date.toDateString()}</Text>
-                    </TouchableHighlight>
-                    <View style={styles.input}>
-                        {show && (
-                            <DateTimePicker
-                                testID="dateTimePicker"
-                                value={new Date()}
-                                mode="date"
-                                is24Hour={true}
-                                display="default"
-                                onChange={onChangeDate}
-                                maximumDate={new Date()}
-                            />
-                        )}
-                    </View>
-
 
                     <View style={styles.modalButtons}>
                         <Pressable
                             style={[styles.button, styles.buttonCancel]}
-                            onPress={() => { props.setModifyUserModalVisible(!props.modifyUserModalVisible), resetForm()}}
+                            onPress={() => {props.setSearchUserModalVisible(!props.searchUserModalVisible), resetForm()}}
                         >
                             <Text style={styles.textStyle}>Cancel</Text>
                         </Pressable>
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
-                            onPress={() => { props.setModifyUserModalVisible(!props.modifyUserModalVisible), resetForm(), props.modifyUser(form) }}
-                            disabled={form.name == "" || form.date == "" || form.date == undefined ? true : false}
+                            onPress={() => {props.setSearchUserModalVisible(!props.searchUserModalVisible), resetForm(), props.searchUser(form)}}
                         >
-                            <Text style={styles.textStyle}>Modify user</Text>
+                            <Text style={styles.textStyle}>Search</Text>
                         </Pressable>
                     </View>
                 </View>
@@ -144,6 +119,7 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: "center"
     },
+
 
     input: {
         flexDirection: "row"

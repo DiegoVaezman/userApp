@@ -28,14 +28,16 @@ export default function UserCard(props) {
                     <Text style={styles.text} >Name: {selectedUser.name}</Text>
                     <Text style={styles.text} >Birthdate: {selectedUser.lastName}</Text>
                 </View>
-                <Image style={{ width: 50, height: 50, resizeMode: 'contain' }} source={require('../assets/GitHub_logo.png')} />
+                <TouchableHighlight style={{height:50}} onPress={() => props.setSearchUserModalVisible(true)}>
+                    <Image style={{ width: 50, height: 50, resizeMode: 'contain' }} source={require('../assets/GitHub_logo.png')} />
+                </TouchableHighlight>
             </View>
             <View style={styles.cardFunctions}>
                 <View style={styles.cardFunctionsButton} >
-                    <Button title="Modify" onPress={() => props.setModifyUserModalVisible(true)}/>
+                    <Button title="Modify" onPress={() => props.setModifyUserModalVisible(true)} disabled={props.selectedUser.name == "Select one user" ? true : false} />
                 </View>
                 <View style={styles.cardFunctionsButton} >
-                    <Button title="Delete" onPress={() => props.setDeleteUserModalVisible(true)}/>
+                    <Button title="Delete" onPress={() => props.setDeleteUserModalVisible(true)} disabled={props.selectedUser.name == "Select one user" ? true : false} />
                 </View>
             </View>
         </View>

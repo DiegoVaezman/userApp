@@ -20,6 +20,7 @@ const { height, width } = Dimensions.get('window')
 
 
 export default function DeleteUserModal(props){
+    const selectedUser = props.selectedUser
     return (
         <Modal
           animationType="slide"
@@ -31,7 +32,7 @@ export default function DeleteUserModal(props){
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalText}>Are you sure?</Text>
+              <Text style={styles.modalText}>Do you want to delete user {selectedUser.name}? </Text>
 
 
               <View style={styles.modalButtons}>
@@ -43,9 +44,9 @@ export default function DeleteUserModal(props){
                 </Pressable>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
-                  onPress={() => props.setDeleteUserModalVisible(!props.deleteUserModalVisible)}
+                  onPress={() => {props.setDeleteUserModalVisible(!props.deleteUserModalVisible), props.deleteUser()}}
                 >
-                  <Text style={styles.textStyle}>Add user</Text>
+                  <Text style={styles.textStyle}>Yes</Text>
                 </Pressable>
               </View>
             </View>

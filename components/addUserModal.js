@@ -1,56 +1,101 @@
 import React, { useEffect, useState } from "react"
 import {
-  Text,
-  View,
-  ActivityIndicator,
-  Button,
-  Alert,
-  Dimensions,
-  Platform,
-  StyleSheet,
-  Image,
-  TouchableHighlight,
-  FlatList,
-  Modal,
-  Pressable
+    Text,
+    View,
+    ActivityIndicator,
+    Button,
+    Alert,
+    Dimensions,
+    Platform,
+    StyleSheet,
+    Image,
+    TouchableHighlight,
+    FlatList,
+    Modal,
+    Pressable,
+    TextInput
 } from "react-native"
-
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const { height, width } = Dimensions.get('window')
 
 
-export default function AddUserModal(props){
+export default function AddUserModal(props) {
+
+    const [form, setForm] = useState({
+        name: "",
+        date: ""
+    });
+    const [show, setShow] = useState(false);
+
+    const onChangeDate = (event, selectedDate) => {
+        const currentDate = selectedDate;
+        setShow(Platform.OS === 'ios');
+        setForm({...form, date: currentDate});
+    };
+    const onChangeText = (text) => {
+        console.log(text)
+        setForm({...form, name: text})
+    }
+    const resetForm = () => {
+        console.log("Se resetea form")
+        setForm({ name: "", date: "" })
+    }
+
+    console.log(form)
     return (
         <Modal
-          animationType="slide"
-          transparent={true}
-          visible={props.addUserModalVisible}
-          onRequestClose={() => {
-            props.setAddUserModalVisible(!props.addUserModalVisible);
-          }}
+            animationType="slide"
+            transparent={true}
+            visible={props.addUserModalVisible}
+            onRequestClose={() => {
+                props.setAddUserModalVisible(!props.addUserModalVisible);
+            }}
         >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Please, enter name and birthdate.</Text>
+            <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <Text style={styles.modalText}>Please, enter name and birthdate.</Text>
 
+                    <View style={styles.input}>
+                        <TextInput style={styles.textInput} placeholder="Name" value={form.name} onChangeText={onChangeText}/>
+                    </View>
+                    <TouchableHighlight style={styles.input} onPress={() => setShow(true)}>
+                        <Text style={styles.textInput} > {form.date == "" || form.date == undefined ? "Birthdate" : form.date.toDateString()}</Text>
+                    </TouchableHighlight>
+                    <View style={styles.input}>
+                        {show && (
+                            <DateTimePicker
+                                testID="dateTimePicker"
+                                value={new Date()}
+                                mode="date"
+                                is24Hour={true}
+                                display="default"
+                                onChange={onChangeDate}
+                                maximumDate={new Date()}
+                            />
+                        )}
+                    </View>
+                
 
-              <View style={styles.modalButtons}>
-                <Pressable
-                  style={[styles.button, styles.buttonCancel]}
-                  onPress={() => props.setAddUserModalVisible(!props.addUserModalVisible)}
-                >
-                  <Text style={styles.textStyle}>Cancel</Text>
-                </Pressable>
-                <Pressable
-                  style={[styles.button, styles.buttonClose]}
-                  onPress={() => props.setAddUserModalVisible(!props.addUserModalVisible)}
-                >
-                  <Text style={styles.textStyle}>Add user</Text>
-                </Pressable>
-              </View>
+                <View style={styles.modalButtons}>
+                    <Pressable
+                        style={[styles.button, styles.buttonCancel]}
+                        onPress={() => {props.setAddUserModalVisible(!props.addUserModalVisible), resetForm()}}
+                    >
+                        <Text style={styles.textStyle}>Cancel</Text>
+                    </Pressable>
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => {props.setAddUserModalVisible(!props.addUserModalVisible), resetForm(), props.addNewUser(form)}}
+                        disabled={form.name == "" || form.date == "" || form.date == undefined ? true : false}
+                    >
+                        <Text style={styles.textStyle}>Add user</Text>
+                    </Pressable>
+                </View>
+                </View>
             </View>
-          </View>
-        </Modal>
+
+        </Modal >
     )
 }
 
@@ -60,8 +105,8 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)"
-      },
-      modalView: {
+    },
+    modalView: {
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
@@ -69,35 +114,46 @@ const styles = StyleSheet.create({
         alignItems: "center",
         shadowColor: "#000",
         shadowOffset: {
-          width: 0,
-          height: 2
+            width: 0,
+            height: 2
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5
-      },
-      modalButtons: {
+    },
+    modalButtons: {
         flexDirection: "row",
         width: "100%"
-      },
-      button: {
+    },
+    button: {
         borderRadius: 20,
         padding: 10,
         elevation: 2
-      },
-      buttonClose: {
+    },
+    buttonClose: {
         backgroundColor: "#2196F3",
-      },
-      buttonCancel: {
+    },
+    buttonCancel: {
         marginRight: "auto"
-      },
-      textStyle: {
+    },
+    textStyle: {
         color: "white",
         fontWeight: "bold",
         textAlign: "center"
-      },
-      modalText: {
+    },
+    modalText: {
         marginBottom: 15,
         textAlign: "center"
-      }
-  })
+    },
+
+    input: {
+        flexDirection: "row"
+    },
+    textInput: {
+        flex: 0.7,
+        borderWidth: 2,
+        fontSize: 20,
+        margin: 20,
+        padding: 5
+    }
+})
