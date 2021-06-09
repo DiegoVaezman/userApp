@@ -24,14 +24,14 @@ export default function AddUserModal(props) {
 
     const [form, setForm] = useState({
         name: "",
-        date: ""
+        birthdate: ""
     });
     const [show, setShow] = useState(false);
 
     const onChangeDate = (event, selectedDate) => {
         const currentDate = selectedDate;
         setShow(Platform.OS === 'ios');
-        setForm({...form, date: currentDate});
+        setForm({...form, birthdate: currentDate});
     };
     const onChangeText = (text) => {
         console.log(text)
@@ -39,7 +39,7 @@ export default function AddUserModal(props) {
     }
     const resetForm = () => {
         console.log("Se resetea form")
-        setForm({ name: "", date: "" })
+        setForm({ name: "", birthdate: "" })
     }
 
     return (
@@ -59,7 +59,7 @@ export default function AddUserModal(props) {
                         <TextInput style={styles.textInput} placeholder="Name" value={form.name} onChangeText={onChangeText}/>
                     </View>
                     <TouchableHighlight style={styles.input} onPress={() => setShow(true)}>
-                        <Text style={styles.textInput} > {form.date == "" || form.date == undefined ? "Birthdate" : form.date.toDateString()}</Text>
+                        <Text style={styles.textInput} > {form.date == "" || form.birthdate == "" ? "Birthdate" : form.birthdate.toDateString()}</Text>
                     </TouchableHighlight>
                     <View style={styles.input}>
                         {show && (
@@ -86,7 +86,7 @@ export default function AddUserModal(props) {
                     <Pressable
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => {props.setAddUserModalVisible(!props.addUserModalVisible), resetForm(), props.addNewUser(form)}}
-                        disabled={form.name == "" || form.date == "" || form.date == undefined ? true : false}
+                        disabled={form.name == "" || form.birthdate == "" || form.birthdate == undefined ? true : false}
                     >
                         <Text style={styles.textStyle}>Add user</Text>
                     </Pressable>

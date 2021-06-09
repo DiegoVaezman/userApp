@@ -16,12 +16,15 @@ import {
 } from "react-native"
 import ListItem from "./listItem"
 import usersData from "../data/users.json"
-import Header from "./header"
 import UserCard from "./userCard"
 import AddUserModal from "./addUserModal"
 import ModifyUserModal from "./modifyUserModal"
 import DeleteUserModal from "./deleteUserModal"
 import SearchUserModal from "./searchUserModal"
+
+import { getData } from "../services/getData"
+import { deleteData } from "../services/deleteUser"
+import { postData } from "../services/postUser"
 
 const { height, width } = Dimensions.get('window')
 
@@ -31,30 +34,41 @@ export default function MainPage({ route }) {
 
     const localColor = route.params.color;
 
-    const [selectedUser, setSelectedUser] = useState({
-        name: "Select one user",
-        lastName: ""
-    })
+    const { data, getUsers } = getData();
+    useEffect(() => {
+        getUsers()
+    }, []);
 
+    const { deleteUserId } = deleteData();
+    const { postUser } = postData();
+
+    const [selectedUser, setSelectedUser] = useState({})
     const [addUserModalVisible, setAddUserModalVisible] = useState(false);
     const [modifyUserModalVisible, setModifyUserModalVisible] = useState(false);
     const [deleteUserModalVisible, setDeleteUserModalVisible] = useState(false);
     const [searchUserModalVisible, setSearchUserModalVisible] = useState(false);
 
+    
+
     function show(user) {
-        setSelectedUser({ name: user.name, lastName: user.lastName })
+        setSelectedUser(user)
+        console.log(selectedUser)
     }
 
     const addNewUser = (newUser) => {
         console.log("se añade usuario:", newUser.name, newUser.date)
+        postUser(newUser);
+        getUsers();
     }
 
     const modifyUser = (modifiedUser) => {
         console.log("se modifica usuario ", selectedUser.name, "por", modifiedUser.name, "y", modifiedUser.date)
     }
 
-    const deleteUser = () => {
+    const deleteUser = (user) => {
         console.log("se elimina usuario: ", selectedUser.name)
+        deleteUserId(user);
+        getUsers();
     }
 
     const searchUser = (searchUser) => {
@@ -63,17 +77,22 @@ export default function MainPage({ route }) {
 
     return (
         <View style={styles.page1}>
-            <Header />
             <UserCard selectedUser={selectedUser} setModifyUserModalVisible={setModifyUserModalVisible} setDeleteUserModalVisible={setDeleteUserModalVisible} setSearchUserModalVisible={setSearchUserModalVisible} />
             <Image style={{ width: 30, height: 30, resizeMode: 'contain', marginLeft: 10 }} source={require('../assets/GitHub_logo.png')} />
-            <FlatList style={styles.list}
-                data={usersData}
-                renderItem={({ item }) => {
-                    return (
-                        <ListItem key={item.id} user={item} onPress={show} localColor={localColor} />
-                    );
-                }}
-            />
+            <View style={styles.list}>
+                {data.length ? 
+                <FlatList 
+                    data={data}
+                    renderItem={({ item }) => {
+                        return (
+                            <ListItem key={item.id} user={item} onPress={show} localColor={localColor} />
+                        );
+                    }}
+                />
+                :
+                <Text>Loading...</Text>
+                }
+            </View>
             <View style={styles.button} >
                 <Button title="Add new User" onPress={() => setAddUserModalVisible(true)} />
             </View>

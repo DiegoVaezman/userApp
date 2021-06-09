@@ -44,7 +44,7 @@ export default function DeleteUserModal(props){
                 </Pressable>
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
-                  onPress={() => {props.setDeleteUserModalVisible(!props.deleteUserModalVisible), props.deleteUser()}}
+                  onPress={() => {props.setDeleteUserModalVisible(!props.deleteUserModalVisible), props.deleteUser(selectedUser)}}
                 >
                   <Text style={styles.textStyle}>Yes</Text>
                 </Pressable>
