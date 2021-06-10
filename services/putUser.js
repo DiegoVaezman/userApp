@@ -1,16 +1,17 @@
 
 
-export const postData = () => {
+
+export const putData = () => {
     
-    const postUser = async (user) => {
-       
+    const putUser = async (modifiedUser) => {
+
         try {
-            const res = await fetch(`https://hello-world.innocv.com/api/User`, {
-                method: "POST",
+            const res = await fetch(`https://hello-world.innocv.com/api/User/`, {
+                method: "PUT",
                 headers: {
                     "Content-Type": 'application/json'
                 },
-                body: JSON.stringify(user)
+                body: JSON.stringify(modifiedUser)
             });
             const response = JSON.stringify(res)
             return response;
@@ -20,5 +21,5 @@ export const postData = () => {
             return response;
         }
     }
-    return {postUser};
+    return {putUser};
 }

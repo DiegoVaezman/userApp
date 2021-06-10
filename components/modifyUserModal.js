@@ -23,25 +23,30 @@ const { height, width } = Dimensions.get('window')
 
 export default function ModifyUserModal(props) {
 
+    const selectedUser = props.selectedUser
+
     const [form, setForm] = useState({
         name: "",
-        date: ""
+        birthdate: ""
     });
-    const [show, setShow] = useState(false);
+    
+    const [ShowDatePicker, setShowDatePicker] = useState(false);
 
     const onChangeDate = (event, selectedDate) => {
         const currentDate = selectedDate;
-        setShow(Platform.OS === 'ios');
-        setForm({ ...form, date: currentDate });
+        setShowDatePicker(Platform.OS === 'ios');
+        setForm({ ...form, birthdate: currentDate });
     };
     const onChangeText = (text) => {
         console.log(text)
         setForm({ ...form, name: text })
     }
     const resetForm = () => {
+        console.log(form)
         console.log("Se resetea form")
-        setForm({ name: "", date: "" })
+        setForm({ name: "", birthdate: "" })
     }
+
 
     return (
         <Modal
@@ -54,16 +59,17 @@ export default function ModifyUserModal(props) {
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Please, enter new data for the user: {props.selectedUser.name}</Text>
+                    <Text style={styles.modalTitle}>Modify user</Text>
+                    <Text style={styles.modalText}>Please, enter new data for the user: {selectedUser.name}</Text>
 
                     <View style={styles.input}>
                         <TextInput style={styles.textInput} placeholder="Name" value={form.name} onChangeText={onChangeText} />
                     </View>
-                    <TouchableHighlight style={styles.input} onPress={() => setShow(true)}>
-                        <Text style={styles.textInput} > {form.date == "" || form.date == undefined ? "Birthdate" : form.date.toDateString()}</Text>
+                    <TouchableHighlight style={styles.input} onPress={() => setShowDatePicker(true)}>
+                        <Text style={styles.textInput} > {form.birthdate == "" || form.birthdate == undefined ? "Birthdate" : form.birthdate.toDateString()}</Text>
                     </TouchableHighlight>
                     <View style={styles.input}>
-                        {show && (
+                        {ShowDatePicker && (
                             <DateTimePicker
                                 testID="dateTimePicker"
                                 value={new Date()}
@@ -87,7 +93,7 @@ export default function ModifyUserModal(props) {
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => { props.setModifyUserModalVisible(!props.modifyUserModalVisible), resetForm(), props.modifyUser(form) }}
-                            disabled={form.name == "" || form.date == "" || form.date == undefined ? true : false}
+                            disabled={form.name == "" && form.birthdate == "" || undefined ? true : false}
                         >
                             <Text style={styles.textStyle}>Modify user</Text>
                         </Pressable>
@@ -125,6 +131,7 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     button: {
+        width:100,
         borderRadius: 20,
         padding: 10,
         elevation: 2
@@ -140,13 +147,20 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center"
     },
+    modalTitle: {
+        fontSize:30,
+        textAlign: "center",
+        fontWeight: "bold"
+    },
     modalText: {
+        fontSize:20,
         marginBottom: 15,
         textAlign: "center"
     },
 
     input: {
-        flexDirection: "row"
+        flexDirection: "row",
+        marginBottom: 10
     },
     textInput: {
         flex: 0.7,

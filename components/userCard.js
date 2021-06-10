@@ -24,17 +24,17 @@ export default function UserCard(props) {
     return (
         <View style={styles.card}>
             <View style={styles.cardBody}>
-                {selectedUser.name == undefined ? 
+                {selectedUser.id == undefined ? 
                 <View style={{ flex: 1 }}>
                     <Text style={styles.text} >Select one user.</Text>
                 </View> 
                 :
                 <View style={{ flexDirection: "column" }}>
                     <View style={{ flexDirection: "row" }}>
-                        <Image style={{ width: 70, height: 70, resizeMode: 'contain' }} source={selectedUser.name == undefined ? require('../assets/GitHub_logo.png') : { uri: selectedUser.userInfo.results[0].picture.medium }} />
+                        <Image style={{ width: 70, height: 70, resizeMode: 'contain' }} source={selectedUser.id == undefined ? require('../assets/GitHub_logo.png') : { uri: selectedUser.userInfo.results[0].picture.medium }} />
                         <View style={styles.cardBodyText}>
-                            <Text style={styles.text} >{selectedUser.name != undefined && selectedUser.name}</Text>
-                            <Text style={styles.text} >{selectedUser.name != undefined && `DOB: ${formatDate(selectedUser.birthdate)}`}</Text>
+                            <Text style={styles.text} >{selectedUser.id != undefined && selectedUser.name}</Text>
+                            <Text style={styles.text} >{selectedUser.id != undefined && formatDate(selectedUser.birthdate)}</Text>
                         </View>
                     </View>
                     <View style={{marginTop: 10}}>
@@ -45,15 +45,15 @@ export default function UserCard(props) {
                 </View>
                 }
                 <TouchableHighlight style={{ height: 50 }} onPress={() => props.setSearchUserModalVisible(true)}>
-                    <Image style={{ width: 50, height: 50, resizeMode: 'contain' }} source={require('../assets/GitHub_logo.png')} />
+                    <Image style={{ width: 50, height: 50, resizeMode: 'contain' }} source={require('../assets/searchUser_img.png')} />
                 </TouchableHighlight>
             </View>
             <View style={styles.cardFunctions}>
                 <View style={styles.cardFunctionsButton} >
-                    <Button title="Modify" onPress={() => props.setModifyUserModalVisible(true)} disabled={selectedUser.name == undefined ? true : false} />
+                    <Button title="Modify" onPress={() => props.setModifyUserModalVisible(true)} disabled={selectedUser.id == undefined ? true : false} />
                 </View>
                 <View style={styles.cardFunctionsButton} >
-                    <Button title="Delete" onPress={() => props.setDeleteUserModalVisible(true)} disabled={selectedUser.name == undefined ? true : false} />
+                    <Button title="Delete" onPress={() => props.setDeleteUserModalVisible(true)} disabled={selectedUser.id == undefined ? true : false} />
                 </View>
             </View>
         </View>

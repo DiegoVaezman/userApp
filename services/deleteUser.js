@@ -6,9 +6,12 @@ export const deleteData = () => {
             const res = await fetch(`https://hello-world.innocv.com/api/User/${user.id}`, {
                 method: "DELETE"
             });
-            console.log(res)
+            const response = JSON.stringify(res)
+            return response;
         } catch (error) {
-            console.log(error)
+            console.log("There is an error: ", error)
+            response.status = 400;
+            return response;
         }
     }
     return {deleteUserId};

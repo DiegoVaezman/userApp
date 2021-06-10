@@ -21,10 +21,15 @@ import AddUserModal from "./addUserModal"
 import ModifyUserModal from "./modifyUserModal"
 import DeleteUserModal from "./deleteUserModal"
 import SearchUserModal from "./searchUserModal"
+import ResponseUserModal from "./responseUserModal"
 
 import { getData } from "../services/getData"
 import { deleteData } from "../services/deleteUser"
 import { postData } from "../services/postUser"
+import { putData } from "../services/putUser"
+
+
+
 
 const { height, width } = Dimensions.get('window')
 
@@ -34,63 +39,103 @@ export default function MainPage({ route }) {
 
     const localColor = route.params.color;
 
-    const { data, getUsers } = getData();
+    const { data, setData, getUsers } = getData();
     useEffect(() => {
-        getUsers()
+        getUsersList()
     }, []);
 
     const { deleteUserId } = deleteData();
     const { postUser } = postData();
+    const { putUser } = putData();
 
     const [selectedUser, setSelectedUser] = useState({})
     const [addUserModalVisible, setAddUserModalVisible] = useState(false);
     const [modifyUserModalVisible, setModifyUserModalVisible] = useState(false);
     const [deleteUserModalVisible, setDeleteUserModalVisible] = useState(false);
     const [searchUserModalVisible, setSearchUserModalVisible] = useState(false);
+    const [responseUserModalVisible, setResponseUserModalVisible] = useState(false);
+
+    const [ apiResponse, setApiResponse ] = useState({})
+
+    const [filteredData, setFilteredData ] = useState([])
 
     
 
-    function show(user) {
+    const showUser = (user) => {
         setSelectedUser(user)
-        console.log(selectedUser)
     }
 
-    const addNewUser = (newUser) => {
+    const getUsersList = async (users) => {
+        const response = JSON.parse(await getUsers());
+        console.log(response.status)
+        if (response.status != 200) {
+            setApiResponse({status: response.status})
+            setResponseUserModalVisible(true);
+        }
+    }
+    const addNewUser = async (newUser) => {
         console.log("se añade usuario:", newUser.name, newUser.date)
-        postUser(newUser);
-        getUsers();
+        const response = JSON.parse(await postUser(newUser));
+        console.log(response.status)
+        setApiResponse({status: response.status})
+        setResponseUserModalVisible(true);
+        setData({});
+        getUsersList();
     }
 
-    const modifyUser = (modifiedUser) => {
-        console.log("se modifica usuario ", selectedUser.name, "por", modifiedUser.name, "y", modifiedUser.date)
+    const modifyUser = async (modifiedUser) => {
+        if (modifiedUser.name == "") {
+            modifiedUser.name = selectedUser.name
+        }
+        if (modifiedUser.birthdate == "") {
+            modifiedUser.birthdate = selectedUser.birthdate
+        }
+        console.log("se modifica usuario ", selectedUser.name, "por", modifiedUser.name, "y", modifiedUser.birthdate)
+        modifiedUser.id = selectedUser.id
+        const response = JSON.parse(await putUser(modifiedUser));
+        setApiResponse({status: response.status})
+        setResponseUserModalVisible(true);
+        setSelectedUser({});
+        setData({});
+        getUsersList();
     }
 
-    const deleteUser = (user) => {
+    const deleteUser = async (user) => {
         console.log("se elimina usuario: ", selectedUser.name)
-        deleteUserId(user);
-        getUsers();
+        const response = JSON.parse(await deleteUserId(user));
+        setApiResponse({status: response.status})
+        setResponseUserModalVisible(true);
+        setSelectedUser({});
+        setData({});
+        getUsersList();
     }
 
     const searchUser = (searchUser) => {
         console.log("se busca a usuario: ", searchUser.name)
+        const newArray = data.filter(user => user.name.toLowerCase().includes(searchUser.name.toLowerCase()))
+        setFilteredData(newArray)
     }
 
+    console.log(data)
     return (
         <View style={styles.page1}>
             <UserCard selectedUser={selectedUser} setModifyUserModalVisible={setModifyUserModalVisible} setDeleteUserModalVisible={setDeleteUserModalVisible} setSearchUserModalVisible={setSearchUserModalVisible} />
-            <Image style={{ width: 30, height: 30, resizeMode: 'contain', marginLeft: 10 }} source={require('../assets/GitHub_logo.png')} />
+            <TouchableHighlight style={styles.refreshList} onPress={() => setFilteredData([])}>
+                <Image style={{ width: 30, height: 30}} source={require('../assets/refresh_img.png')} />
+            </TouchableHighlight>
             <View style={styles.list}>
-                {data.length ? 
-                <FlatList 
-                    data={data}
-                    renderItem={({ item }) => {
-                        return (
-                            <ListItem key={item.id} user={item} onPress={show} localColor={localColor} />
-                        );
-                    }}
-                />
-                :
-                <Text>Loading...</Text>
+                {data.length ?
+                    <FlatList
+                        data={filteredData.length ? filteredData : data}
+                        renderItem={({ item }) => {
+                            return (
+                                <ListItem user={item} onPress={showUser} localColor={localColor} />
+                            );
+                        }}
+                        keyExtractor={item => item.id.toString()}
+                    />
+                    :
+                    <Text>Loading...</Text>
                 }
             </View>
             <View style={styles.button} >
@@ -120,6 +165,12 @@ export default function MainPage({ route }) {
                 searchUserModalVisible={searchUserModalVisible}
                 searchUser={searchUser}
             />
+            <ResponseUserModal
+                setResponseUserModalVisible={setResponseUserModalVisible}
+                responseUserModalVisible={responseUserModalVisible}
+                setApiResponse={setApiResponse}
+                apiResponse={apiResponse}
+            />
 
         </View>
 
@@ -143,55 +194,13 @@ const styles = StyleSheet.create({
         borderColor: "blue"
     },
     button: {
-        width: width - 200,
+        width: width-20,
         alignSelf: "center"
     },
-
-
-
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "rgba(0, 0, 0, 0.5)"
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
-    },
-    modalButtons: {
-        flexDirection: "row",
-        width: "100%"
-    },
-    button: {
-        borderRadius: 20,
-        padding: 10,
-        elevation: 2
-    },
-    buttonClose: {
-        backgroundColor: "#2196F3",
-    },
-    buttonCancel: {
-        marginRight: "auto"
-    },
-    textStyle: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center"
-    },
-    modalText: {
-        marginBottom: 15,
-        textAlign: "center"
+    refreshList: { 
+        width: 30, 
+        height: 30, 
+        resizeMode: 'contain', 
+        marginLeft: 10 
     }
 })

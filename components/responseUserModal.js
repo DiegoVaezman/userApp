@@ -15,56 +15,39 @@ import {
     Pressable,
     TextInput
 } from "react-native"
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 const { height, width } = Dimensions.get('window')
 
 
-export default function SearchUserModal(props) {
-
-    const [form, setForm] = useState({
-        name: ""
-    });
-
-    const onChangeText = (text) => {
-        console.log(text)
-        setForm({ ...form, name: text })
-    }
-
-    const resetForm = () => {
-        console.log("Se resetea form")
-        setForm({ name: ""})
-    }
+export default function ResponseUserModal(props) {
 
     return (
         <Modal
             animationType="slide"
             transparent={true}
-            visible={props.searchUserModalVisible}
+            visible={props.responseUserModalVisible}
             onRequestClose={() => {
-                props.setSearchUserModalVisible(!props.searchUserModalVisible);
+                props.setResponseUserModalVisible(!props.responseUserModalVisible);
             }}
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                    <Text style={styles.modalText}>Search user by name</Text>
-
-                    <View style={styles.input}>
-                        <TextInput style={styles.textInput} placeholder="Name" value={form.name} onChangeText={onChangeText} />
-                    </View>
-
+                    {props.apiResponse.status == 200 ? 
+                        <Text style={styles.modalText}>Success!</Text>
+                    :
+                        <View >
+                            <Text style={styles.modalText}>Something was wrong</Text>
+                            <Text>Status: {props.apiResponse.status}</Text>
+                        </View>
+                    }
                     <View style={styles.modalButtons}>
                         <Pressable
-                            style={[styles.button, styles.buttonCancel]}
-                            onPress={() => {props.setSearchUserModalVisible(!props.searchUserModalVisible), resetForm()}}
-                        >
-                            <Text style={styles.textStyle}>Cancel</Text>
-                        </Pressable>
-                        <Pressable
                             style={[styles.button, styles.buttonClose]}
-                            onPress={() => {props.setSearchUserModalVisible(!props.searchUserModalVisible), resetForm(), props.searchUser(form)}}
+                            onPress={() => {props.setResponseUserModalVisible(!props.responseUserModalVisible), props.setApiResponse({})}}
                         >
-                            <Text style={styles.textStyle}>Search</Text>
+                            <Text style={styles.textStyle}>OK</Text>
                         </Pressable>
                     </View>
                 </View>
@@ -81,6 +64,7 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0, 0, 0, 0.5)"
     },
     modalView: {
+        width:300,
         margin: 20,
         backgroundColor: "white",
         borderRadius: 20,
@@ -96,10 +80,11 @@ const styles = StyleSheet.create({
         elevation: 5
     },
     modalButtons: {
-        flexDirection: "row",
+        alignItems: "center",
         width: "100%"
     },
     button: {
+        width: 80,
         borderRadius: 20,
         padding: 10,
         elevation: 2
@@ -116,17 +101,12 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     modalText: {
-        fontSize: 20,
         marginBottom: 15,
-        textAlign: "center",
-        marginBottom: 10,
-        fontWeight: "bold"
+        textAlign: "center"
     },
 
-
     input: {
-        flexDirection: "row",
-        marginBottom: 20
+        flexDirection: "row"
     },
     textInput: {
         flex: 0.7,

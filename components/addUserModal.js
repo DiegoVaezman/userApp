@@ -16,6 +16,8 @@ import {
     TextInput
 } from "react-native"
 import DateTimePicker from '@react-native-community/datetimepicker';
+import formatDate from "../services/formatDate"
+
 
 const { height, width } = Dimensions.get('window')
 
@@ -53,13 +55,14 @@ export default function AddUserModal(props) {
         >
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
+                    <Text style={styles.modalTitle}>Add new user</Text>
                     <Text style={styles.modalText}>Please, enter name and birthdate.</Text>
 
                     <View style={styles.input}>
                         <TextInput style={styles.textInput} placeholder="Name" value={form.name} onChangeText={onChangeText}/>
                     </View>
                     <TouchableHighlight style={styles.input} onPress={() => setShow(true)}>
-                        <Text style={styles.textInput} > {form.date == "" || form.birthdate == "" ? "Birthdate" : form.birthdate.toDateString()}</Text>
+                        <Text style={styles.textInput} > {form.date == "" || form.birthdate == "" ? "Birthdate" : formatDate(form.birthdate)}</Text>
                     </TouchableHighlight>
                     <View style={styles.input}>
                         {show && (
@@ -125,6 +128,7 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     button: {
+        width:80,
         borderRadius: 20,
         padding: 10,
         elevation: 2
@@ -140,13 +144,20 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         textAlign: "center"
     },
+    modalTitle: {
+        fontSize:30,
+        textAlign: "center",
+        fontWeight: "bold"
+    },
     modalText: {
+        fontSize:20,
         marginBottom: 15,
         textAlign: "center"
     },
 
     input: {
-        flexDirection: "row"
+        flexDirection: "row",
+        marginBottom: 10
     },
     textInput: {
         flex: 0.7,
