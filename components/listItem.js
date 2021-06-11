@@ -1,38 +1,39 @@
-import React, { useState }from "react"
-import { 
-    Text, 
-    View, 
-    ActivityIndicator, 
-    Button, 
-    Alert, 
-    Dimensions, 
-    Platform, 
-    StyleSheet, 
-    Image,
-    TouchableHighlight 
-    } from "react-native";
+import React from "react";
+import {
+    Text,
+    View,
+    StyleSheet,
+    TouchableHighlight
+} from "react-native";
 
-export default function UsersList({user, onPress = (f) => f, localColor}){
+export default function UsersList({ user, onPress = (f) => f, appColor }) {
 
-    
     return (
-        <TouchableHighlight onPress={() => onPress(user)}>
-            <View style={styles.itemList}>
-                <View style={[styles.circleDot, {backgroundColor: localColor}]}/>
+        <TouchableHighlight onPress={() => onPress(user)} underlayColor={appColor} activeOpacity={1}>
+            <View style={[styles.itemList, { borderBottomColor: appColor, borderRightColor: appColor }]}>
+                <View style={[styles.circleDot, { backgroundColor: appColor }]} />
                 <Text style={styles.text}>{user.name}</Text>
             </View>
         </TouchableHighlight>
     )
-}
+};
 
 const styles = StyleSheet.create({
     itemList: {
-        padding:5,
+        padding: 5,
+        margin: 5,
         height: 70,
-        borderBottomWidth: 1,
-        borderBottomColor: "blue",
         flexDirection: "row",
         alignItems: "center",
+        backgroundColor: "white",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.27,
+        shadowRadius: 4.65,
+        elevation: 6,
     },
     circleDot: {
         marginLeft: 10,
@@ -44,4 +45,4 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20
     }
-  })
+});

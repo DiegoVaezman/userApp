@@ -1,27 +1,15 @@
-import React, { useEffect, useState } from "react"
+import React from "react";
 import {
     Text,
     View,
-    ActivityIndicator,
-    Button,
-    Alert,
-    Dimensions,
-    Platform,
     StyleSheet,
-    Image,
-    TouchableHighlight,
-    FlatList,
     Modal,
     Pressable,
-    TextInput
-} from "react-native"
-import DateTimePicker from '@react-native-community/datetimepicker';
-
-
-const { height, width } = Dimensions.get('window')
+} from "react-native";
 
 
 export default function ResponseUserModal(props) {
+    const appColor= props.appColor;
 
     return (
         <Modal
@@ -39,12 +27,12 @@ export default function ResponseUserModal(props) {
                     :
                         <View >
                             <Text style={styles.modalText}>Something was wrong</Text>
-                            <Text>Status: {props.apiResponse.status}</Text>
+                            <Text style={styles.modalText} >Status: {props.apiResponse.status}</Text>
                         </View>
                     }
                     <View style={styles.modalButtons}>
                         <Pressable
-                            style={[styles.button, styles.buttonClose]}
+                            style={[styles.button, {backgroundColor: appColor}]}
                             onPress={() => {props.setResponseUserModalVisible(!props.responseUserModalVisible), props.setApiResponse({})}}
                         >
                             <Text style={styles.textStyle}>OK</Text>
@@ -53,8 +41,8 @@ export default function ResponseUserModal(props) {
                 </View>
             </View>
         </Modal>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     centeredView: {
@@ -89,12 +77,6 @@ const styles = StyleSheet.create({
         padding: 10,
         elevation: 2
     },
-    buttonClose: {
-        backgroundColor: "#2196F3",
-    },
-    buttonCancel: {
-        marginRight: "auto"
-    },
     textStyle: {
         color: "white",
         fontWeight: "bold",
@@ -103,16 +85,5 @@ const styles = StyleSheet.create({
     modalText: {
         marginBottom: 15,
         textAlign: "center"
-    },
-
-    input: {
-        flexDirection: "row"
-    },
-    textInput: {
-        flex: 0.7,
-        borderWidth: 2,
-        fontSize: 20,
-        margin: 20,
-        padding: 5
     }
-})
+});

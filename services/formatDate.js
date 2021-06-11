@@ -6,9 +6,9 @@ const formatDate = (utcDate) => {
     function checkTime(i) {
         if (i < 10) {
             i = "0" + i;
-        }
+        };
         return i;
-    }
+    };
     m = checkTime(m);
     var month = new Array([]);
     month[0] = "January";
@@ -31,7 +31,7 @@ const formatDate = (utcDate) => {
     weekday[4] = "Thursday";
     weekday[5] = "Friday";
     weekday[6] = "Saturday";
-    return `${date.getDate()} ${month[date.getMonth()]} ${date.getFullYear()}.`;
+    return `${date.getDate()} ${month[date.getMonth()]} ${date.getFullYear()}`;
 };
 
 export default formatDate

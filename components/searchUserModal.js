@@ -1,40 +1,29 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react";
 import {
     Text,
     View,
-    ActivityIndicator,
-    Button,
-    Alert,
     Dimensions,
-    Platform,
     StyleSheet,
-    Image,
-    TouchableHighlight,
-    FlatList,
     Modal,
     Pressable,
     TextInput
-} from "react-native"
-
-
-const { height, width } = Dimensions.get('window')
+} from "react-native";
 
 
 export default function SearchUserModal(props) {
+    const appColor = props.appColor;
 
     const [form, setForm] = useState({
         name: ""
     });
 
     const onChangeText = (text) => {
-        console.log(text)
-        setForm({ ...form, name: text })
-    }
+        setForm({ ...form, name: text });
+    };
 
     const resetForm = () => {
-        console.log("Se resetea form")
-        setForm({ name: ""})
-    }
+        setForm({ name: ""});
+    };
 
     return (
         <Modal
@@ -61,7 +50,7 @@ export default function SearchUserModal(props) {
                             <Text style={styles.textStyle}>Cancel</Text>
                         </Pressable>
                         <Pressable
-                            style={[styles.button, styles.buttonClose]}
+                            style={[styles.button, {backgroundColor: appColor}]}
                             onPress={() => {props.setSearchUserModalVisible(!props.searchUserModalVisible), resetForm(), props.searchUser(form)}}
                         >
                             <Text style={styles.textStyle}>Search</Text>
@@ -70,8 +59,8 @@ export default function SearchUserModal(props) {
                 </View>
             </View>
         </Modal>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     centeredView: {
@@ -100,12 +89,10 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     button: {
+        width: 80,
         borderRadius: 20,
         padding: 10,
         elevation: 2
-    },
-    buttonClose: {
-        backgroundColor: "#2196F3",
     },
     buttonCancel: {
         marginRight: "auto"
@@ -123,7 +110,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
     },
 
-
     input: {
         flexDirection: "row",
         marginBottom: 20
@@ -135,4 +121,4 @@ const styles = StyleSheet.create({
         margin: 20,
         padding: 5
     }
-})
+});

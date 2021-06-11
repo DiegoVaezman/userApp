@@ -1,28 +1,21 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import formatDate from "../services/formatDate";
 import {
     Text,
     View,
-    ActivityIndicator,
-    Button,
-    Alert,
-    Dimensions,
     Platform,
     StyleSheet,
-    Image,
     TouchableHighlight,
-    FlatList,
     Modal,
     Pressable,
     TextInput
-} from "react-native"
-import DateTimePicker from '@react-native-community/datetimepicker';
-import formatDate from "../services/formatDate"
-
-
-const { height, width } = Dimensions.get('window')
+} from "react-native";
 
 
 export default function AddUserModal(props) {
+
+    const appColor = props.appColor;
 
     const [form, setForm] = useState({
         name: "",
@@ -36,13 +29,11 @@ export default function AddUserModal(props) {
         setForm({...form, birthdate: currentDate});
     };
     const onChangeText = (text) => {
-        console.log(text)
-        setForm({...form, name: text})
-    }
+        setForm({...form, name: text});
+    };
     const resetForm = () => {
-        console.log("Se resetea form")
-        setForm({ name: "", birthdate: "" })
-    }
+        setForm({ name: "", birthdate: "" });
+    };
 
     return (
         <Modal
@@ -61,8 +52,8 @@ export default function AddUserModal(props) {
                     <View style={styles.input}>
                         <TextInput style={styles.textInput} placeholder="Name" value={form.name} onChangeText={onChangeText}/>
                     </View>
-                    <TouchableHighlight style={styles.input} onPress={() => setShow(true)}>
-                        <Text style={styles.textInput} > {form.date == "" || form.birthdate == "" ? "Birthdate" : formatDate(form.birthdate)}</Text>
+                    <TouchableHighlight style={styles.input} onPress={() => setShow(true)} underlayColor={appColor} activeOpacity={1}>
+                        <Text style={styles.textInput} > {form.birthdate == "" || form.birthdate == undefined ? "Birthdate" : formatDate(form.birthdate)}</Text>
                     </TouchableHighlight>
                     <View style={styles.input}>
                         {show && (
@@ -77,8 +68,6 @@ export default function AddUserModal(props) {
                             />
                         )}
                     </View>
-                
-
                 <View style={styles.modalButtons}>
                     <Pressable
                         style={[styles.button, styles.buttonCancel]}
@@ -87,7 +76,7 @@ export default function AddUserModal(props) {
                         <Text style={styles.textStyle}>Cancel</Text>
                     </Pressable>
                     <Pressable
-                        style={[styles.button, styles.buttonClose]}
+                        style={[styles.button, {backgroundColor: appColor}]}
                         onPress={() => {props.setAddUserModalVisible(!props.addUserModalVisible), resetForm(), props.addNewUser(form)}}
                         disabled={form.name == "" || form.birthdate == "" || form.birthdate == undefined ? true : false}
                     >
@@ -96,10 +85,9 @@ export default function AddUserModal(props) {
                 </View>
                 </View>
             </View>
-
         </Modal >
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     centeredView: {
@@ -133,9 +121,6 @@ const styles = StyleSheet.create({
         padding: 10,
         elevation: 2
     },
-    buttonClose: {
-        backgroundColor: "#2196F3",
-    },
     buttonCancel: {
         marginRight: "auto"
     },
@@ -166,4 +151,4 @@ const styles = StyleSheet.create({
         margin: 20,
         padding: 5
     }
-})
+});

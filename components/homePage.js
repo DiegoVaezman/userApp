@@ -1,70 +1,47 @@
-import React, { useEffect, useState } from "react"
+import React from "react";
 import {
   Text,
   View,
-  ActivityIndicator,
   Button,
-  Alert,
   Dimensions,
-  Platform,
   StyleSheet,
   Image,
   TouchableHighlight,
-  FlatList,
-  Modal,
-  Pressable
-} from "react-native"
+} from "react-native";
+import { colorTheme } from "../services/colorTheme";
 
-
-const { height, width } = Dimensions.get('window')
-// let localColor:String;
-
-
-
-
+const { height, width } = Dimensions.get('window');
 
 export default function HomePage({ navigation }) {
-
-
-  const [appColor, setAppColor] = useState("#FFFFFF")
-
-  const RandomGenerate = () => {
-    return Math.floor(Math.random() * 255).toString(16);
-  }
-  const colorHex = () => {
-    const localColor = "#" + RandomGenerate() + RandomGenerate() + RandomGenerate();
-    setAppColor(`${localColor}`)
-    console.log(`#d3${appColor.slice(3)}`)
-  }
-
+  const { appColor, colorHex } = colorTheme();
   return (
     <View style={[styles.page, {backgroundColor: `${appColor}26`}]} >
       <View style={styles.logo}>
-        <TouchableHighlight style={styles.logoImg} onPress={() => colorHex()}>
-          <Image source={require('../assets/userapp_logo.jpg')} />
+        <TouchableHighlight style={styles.logoImg} onPress={() => colorHex()} underlayColor={appColor} activeOpacity={1}>
+          <Image style={{ width: 180, height: 180, resizeMode: 'contain' }}  source={require('../assets/userapp_logo.png')} />
         </TouchableHighlight>
         <Text>Choose your app color theme tapping the logo!</Text>
       </View>
       <View style={styles.button}>
         <Button color={appColor} title="Enter" onPress={() => { navigation.navigate("mainPage", { color: appColor }) }} />
       </View>
-      <View style={{ flexDirection: "row", justifyContent: "space-between", width: width - 150 }}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between", width: width - 100}}>
         <View style={styles.links}>
           <Image style={{ width: 50, height: 50, resizeMode: 'contain' }} source={require('../assets/GitHub_logo.png')} />
-          <Text style={styles.text}>GitHub</Text>
+          <Text style={styles.text}>github.com/DiegoVaezman/userApp</Text>
         </View>
         <View style={styles.links}>
           <Image style={{ width: 50, height: 50, resizeMode: 'contain' }} source={require('../assets/portfolio_logo.png')} />
-          <Text style={styles.text}>Portfolio</Text>
+          <Text style={styles.text}>vaezman.netlify.app/</Text>
         </View>
-        <View style={styles.links}>
+        {/* <View style={styles.links}>
           <Image style={{ width: 50, height: 50, resizeMode: 'contain' }} source={require('../assets/linkedin_logo.png')} />
-          <Text style={styles.text}>Linkedin</Text>
-        </View>
+          <Text style={styles.text}>linkedin.com/in/diego-narvaez-guzman</Text>
+        </View> */}
       </View>
     </View>
   )
-}
+};
 
 const styles = StyleSheet.create({
   page: {
@@ -93,5 +70,4 @@ const styles = StyleSheet.create({
   links: {
     alignItems: "center"
   }
-
-})
+});

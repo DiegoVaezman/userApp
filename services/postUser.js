@@ -1,9 +1,5 @@
-
-
 export const postData = () => {
-    
     const postUser = async (user) => {
-       
         try {
             const res = await fetch(`https://hello-world.innocv.com/api/User`, {
                 method: "POST",
@@ -16,9 +12,9 @@ export const postData = () => {
             return response;
         } catch (error) {
             console.log("There is an error: ", error)
-            response.status = 400;
-            return response;
-        }
-    }
+            const response = {status: "Service comunication failed"};
+            return JSON.stringify(response);
+        };
+    };
     return {postUser};
-}
+};

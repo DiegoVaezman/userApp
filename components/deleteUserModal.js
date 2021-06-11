@@ -1,26 +1,15 @@
-import React, { useEffect, useState } from "react"
+import React from "react";
 import {
   Text,
   View,
-  ActivityIndicator,
-  Button,
-  Alert,
-  Dimensions,
-  Platform,
   StyleSheet,
-  Image,
-  TouchableHighlight,
-  FlatList,
   Modal,
   Pressable
-} from "react-native"
-
-
-const { height, width } = Dimensions.get('window')
-
+} from "react-native";
 
 export default function DeleteUserModal(props) {
-  const selectedUser = props.selectedUser
+  const appColor = props.appColor;
+  const selectedUser = props.selectedUser;
   return (
     <Modal
       animationType="slide"
@@ -41,7 +30,7 @@ export default function DeleteUserModal(props) {
               <Text style={styles.textStyle}>Cancel</Text>
             </Pressable>
             <Pressable
-              style={[styles.button, styles.buttonClose]}
+              style={[styles.button, {backgroundColor: appColor}]}
               onPress={() => { props.setDeleteUserModalVisible(!props.deleteUserModalVisible), props.deleteUser(selectedUser) }}
             >
               <Text style={styles.textStyle}>Yes</Text>
@@ -51,7 +40,7 @@ export default function DeleteUserModal(props) {
       </View>
     </Modal>
   )
-}
+};
 
 const styles = StyleSheet.create({
   centeredView: {
@@ -85,9 +74,6 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2
   },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
   buttonCancel: {
     marginRight: "auto"
   },
@@ -103,4 +89,4 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     fontWeight: "bold"
   }
-})
+});
