@@ -1,4 +1,6 @@
 # USER APP
+![alt rockbands](assets/userapp-appimg.jpg)
+<br>
 User app es una React Native Application para la gestión de una lista de usuarios y la realización de funcionalidades CRUD a la DB a través de una API proporcionada por INNOCV-Solutions.
 <br>
 <br>
